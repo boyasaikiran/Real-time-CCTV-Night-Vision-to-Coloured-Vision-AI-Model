@@ -4,6 +4,7 @@ train.py
 Train Pix2Pix on LLVIP
 """
 
+import os
 import torch
 
 from datasets.loader import LLVIPDataLoader
@@ -28,13 +29,28 @@ print()
 
 
 # ============================================================
+# Dataset Path (Automatic Windows / Kaggle Detection)
+# ============================================================
+
+if os.path.exists("/kaggle/input"):
+    DATASET_PATH = "/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP"
+    print("Running on Kaggle")
+else:
+    DATASET_PATH = "datasets/processed"
+    print("Running on Local Machine")
+
+print("Dataset Path :", DATASET_PATH)
+print()
+
+
+# ============================================================
 # Dataset
 # ============================================================
 
 loader = LLVIPDataLoader(
-    dataset_path="datasets/processed",
+    dataset_path=DATASET_PATH,
     batch_size=2,
-    num_workers=0
+    num_workers=2
 )
 
 train_loader = loader.train_loader()
