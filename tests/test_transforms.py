@@ -4,7 +4,7 @@ from datasets.transforms import LLVIPTransforms
 transform = LLVIPTransforms().train_transform()
 
 dataset = LLVIPDataset(
-    dataset_path="datasets/raw/LLVIP",
+    dataset_path="/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP",
     split="train",
     transform=transform
 )
