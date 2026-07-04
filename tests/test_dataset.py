@@ -2,7 +2,7 @@ from datasets.dataset import LLVIPDataset
 
 dataset = LLVIPDataset(
 
-    dataset_path="datasets/raw/LLVIP",
+    dataset_path="/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP",
 
     split="train"
 
