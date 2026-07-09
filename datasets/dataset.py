@@ -1,3 +1,9 @@
+"""
+dataset.py
+
+LLVIP Dataset Loader
+"""
+
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -7,32 +13,28 @@ from torch.utils.data import Dataset
 
 class LLVIPDataset(Dataset):
 
-    def __init__(self,
-                 dataset_path,
-                 split="train",
-                 transform=None):
+    def __init__(
+        self,
+        dataset_path,
+        split="train",
+        transform=None
+    ):
 
         self.dataset_path = Path(dataset_path)
-
+        self.split = split
         self.transform = transform
 
-        self.split = split
-
         self.ir_folder = self.dataset_path / "infrared" / split
-
         self.rgb_folder = self.dataset_path / "visible" / split
-
         self.annotation_folder = self.dataset_path / "Annotations"
 
         self.ir_images = sorted(self.ir_folder.glob("*.jpg"))
-
         self.rgb_images = sorted(self.rgb_folder.glob("*.jpg"))
 
         assert len(self.ir_images) == len(self.rgb_images), \
-            "Infrared and Visible images are not paired"
+            "Infrared and Visible images are not paired."
 
     def __len__(self):
-
         return len(self.ir_images)
 
     def load_annotation(self, image_name):
@@ -43,14 +45,13 @@ class LLVIPDataset(Dataset):
             return []
 
         tree = ET.parse(xml_file)
-
         root = tree.getroot()
 
         objects = []
 
         for obj in root.findall("object"):
 
-            name = obj.find("name").text
+            label = obj.find("name").text
 
             bbox = obj.find("bndbox")
 
@@ -60,11 +61,8 @@ class LLVIPDataset(Dataset):
             ymax = int(bbox.find("ymax").text)
 
             objects.append({
-
-                "label": name,
-
+                "label": label,
                 "bbox": [xmin, ymin, xmax, ymax]
-
             })
 
         return objects
@@ -72,28 +70,22 @@ class LLVIPDataset(Dataset):
     def __getitem__(self, index):
 
         ir_path = self.ir_images[index]
-
         rgb_path = self.rgb_images[index]
 
-        ir_image = Image.open(ir_path).convert("RGB")
-
-        rgb_image = Image.open(rgb_path).convert("RGB")
-
-        annotation = self.load_annotation(ir_path.stem)
+        infrared = Image.open(ir_path).convert("RGB")
+        visible = Image.open(rgb_path).convert("RGB")
 
         if self.transform:
-
-            ir_image = self.transform(ir_image)
-
-            rgb_image = self.transform(rgb_image)
+            infrared = self.transform(infrared)
+            visible = self.transform(visible)
 
         sample = {
 
-            "infrared": ir_image,
+            "infrared": infrared,
 
-            "visible": rgb_image,
+            "visible": visible,
 
-            "annotation": annotation,
+            "annotation": self.load_annotation(ir_path.stem),
 
             "filename": ir_path.name
 

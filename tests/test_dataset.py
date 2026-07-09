@@ -1,8 +1,22 @@
+"""
+Test LLVIP Dataset
+"""
+
+import os
+
 from datasets.dataset import LLVIPDataset
+
+
+# Automatically detect Windows or Kaggle
+if os.path.exists("/kaggle/input"):
+    DATASET_PATH = "/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP"
+else:
+    DATASET_PATH = "datasets/raw/LLVIP"
+
 
 dataset = LLVIPDataset(
 
-    dataset_path="/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP",
+    dataset_path=DATASET_PATH,
 
     split="train"
 
@@ -11,9 +25,7 @@ dataset = LLVIPDataset(
 print()
 
 print("=" * 60)
-
 print("DATASET INFORMATION")
-
 print("=" * 60)
 
 print("Dataset Size :", len(dataset))
@@ -23,29 +35,24 @@ sample = dataset[0]
 print()
 
 print("Keys")
-
 print(sample.keys())
 
 print()
 
 print("Filename")
-
 print(sample["filename"])
 
 print()
 
 print("Annotation")
-
 print(sample["annotation"][:3])
 
 print()
 
 print("Infrared Size")
-
 print(sample["infrared"].size)
 
 print()
 
 print("Visible Size")
-
 print(sample["visible"].size)
