@@ -32,15 +32,7 @@ print()
 # Dataset Path (Automatic Windows / Kaggle Detection)
 # ============================================================
 
-if os.path.exists("/kaggle/input"):
-    DATASET_PATH = "/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP"
-    print("Running on Kaggle")
-else:
-    DATASET_PATH = "datasets/processed"
-    print("Running on Local Machine")
-
-print("Dataset Path :", DATASET_PATH)
-print()
+from configs.paths import DATASET_PATH
 
 
 # ============================================================

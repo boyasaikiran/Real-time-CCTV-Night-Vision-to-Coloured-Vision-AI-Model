@@ -12,10 +12,7 @@ from datasets.transforms import LLVIPTransforms
 # Dataset Path
 # ============================================================
 
-if os.path.exists("/kaggle/input"):
-    DATASET_PATH = "/kaggle/input/datasets/boyasaikiran/llvip-dataset/LLVIP"
-else:
-    DATASET_PATH = "datasets/raw/LLVIP"
+from configs.paths import DATASET_PATH
 
 
 # ============================================================
